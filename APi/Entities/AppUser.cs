@@ -25,7 +25,9 @@ namespace APi.Entities
         public ICollection<Photo> Photos { get; set; }
         // public int GetAge() => DateOfBirth.CalaculateAge();
         public ICollection<UserLike> LikeByUser { get; set; }
-        public ICollection<UserLike> LikedUser { get; set; }
+        public ICollection<UserLike> LikedUser { get; set; } 
+        public ICollection<Message> MessagesSent { get; set; }
+        public ICollection<Message> MessagesRecived { get; set; }
 
 
     }
