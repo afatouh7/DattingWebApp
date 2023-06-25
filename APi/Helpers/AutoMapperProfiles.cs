@@ -21,6 +21,12 @@ namespace APi.Helpers
           .ForMember(dest => dest.KnownAs, opt => opt.MapFrom(src => src.KnownAs));
 
 
+            CreateMap<Message, MessageDto>()
+                .ForMember(dst => dst.SenderPhotUrl, opt => opt.MapFrom(src => src.Sender.Photos.FirstOrDefault(x => x.IsMain).Url))
+                .ForMember(dst => dst.RecipientPhotoUrl, opt => opt.MapFrom(src => src.Recipient.Photos.FirstOrDefault(x => x.IsMain).Url));
+                
+
+
         }
 
     }
