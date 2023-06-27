@@ -10,23 +10,29 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
+import { memberDetailsResolver } from './_resolvers/member-deteails.resolver';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { AdminGuard } from './_guards/admin.guard';
 
 const routes: Routes = [
   {path:'',component:HomeComponent},
   {
     path:'', runGuardsAndResolvers:'always',
-    canActivate:[AuthGuard],children:[
+    canActivate:[AuthGuard],
+    children:[
       {path:'members',component:MemberListComponent},
-      {path:'members/:username',component:MemberDetailComponent},
+      {path:'members/:username',component:MemberDetailComponent,resolve:{member:memberDetailsResolver}},
       {path:'member/edit',component:MemberEditComponent,canDeactivate:[PreventUnsavedChangesGuard]},
 
       {path:'lists',component:ListsComponent},
       {path:'messages',component:MessagesComponent},
-      {path:'not-found',component:NotFoundComponent},
+      {path:'admin',component:AdminPanelComponent,canActivate:[AdminGuard]},
+
+
 
     ]
   },
-
+  {path:'not-found',component:NotFoundComponent},
   {path:'error',component:TestErrorsComponent},
   {path:'**',component:HomeComponent,pathMatch:'full'},
 

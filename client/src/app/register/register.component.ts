@@ -24,7 +24,7 @@ export class RegisterComponent implements OnInit {
     this.registerForm= new FormGroup({
       gender: new FormControl('male'),
       username: new FormControl('',Validators.required),
-      deteOfBirth: new FormControl('',Validators.required),
+      dateOfBirth: new FormControl('',Validators.required),
       city: new FormControl('',Validators.required),
       country: new FormControl('',Validators.required),
       KnownAs: new FormControl('',Validators.required),

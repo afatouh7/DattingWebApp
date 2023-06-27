@@ -2,13 +2,13 @@ import { User } from "./user";
 
 export class UserParams{
   gender:string;
-  minAge:number;
-  maxAge:number;
+  minAge:10;
+  maxAge:150;
   pageNumber:number;
   pageSize:number;
   orderBy='lastActive'
   constructor(user:User){
-    this.gender = user.gender === 'female' ?'male': 'female';
+    this.gender = user.gender === 'male' ?'female': 'male';
   }
 }
 

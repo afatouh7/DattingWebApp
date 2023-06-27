@@ -1,23 +1,46 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
+import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
+import { take } from 'rxjs';
 import { Member } from 'src/app/_models/member';
+import { Messages } from 'src/app/_models/message';
+import { User } from 'src/app/_models/user';
+import { AccountService } from 'src/app/_services/account.service';
 import { MembersService } from 'src/app/_services/members.service';
+import { MessageService } from 'src/app/_services/message.service';
+import { PresenceService } from 'src/app/_services/presence.service';
 
 @Component({
   selector: 'app-member-detail',
   templateUrl: './member-detail.component.html',
   styleUrls: ['./member-detail.component.css']
 })
-export class MemberDetailComponent implements OnInit {
-
+export class MemberDetailComponent implements OnInit, OnDestroy {
+@ViewChild('membertabs',{static:true}) memberTabs:TabsetComponent;
   member: Member;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
-  constructor(private memberService:MembersService, private route: ActivatedRoute) { }
+  activeTab:TabDirective;
+  messages: Messages[]=[];
+  user: User;
+  constructor(public presence:PresenceService, private route: ActivatedRoute,
+    private messageService:MessageService , private accountservice:AccountService) {
+    this.accountservice.currentUser$.pipe(take(1)).subscribe(user=> this.user==user)
+     }
+
+
+
 
   ngOnInit(): void {
-    this.loadMember();
+    this.route.data.subscribe(data=>{
+      this.member=data['member'];
+    })
+
+    this.route.queryParams.subscribe(params=>{
+
+      params['tab'] ? this.selectTabe(params['tab']): this.selectTabe(0);
+    })
 
     this.galleryOptions=[{
    width:'500px',
@@ -42,10 +65,25 @@ export class MemberDetailComponent implements OnInit {
   return imagesUrls;
  }
 
-loadMember(){
-  this.memberService.getMember(this.route.snapshot.paramMap.get('username')).subscribe(member=>{
-    this.member=member;
-    this.galleryImages=this.getImages();
+LoadMessages(){
+  this.messageService.getMessageThread(this.member.username).subscribe(messages=>{
+    this.messages=messages;
   })
+ }
+ selectTabe(tabeId:number){
+  this.memberTabs.tabs[tabeId].active=true;
+
+ }
+
+onTabActivated(data:TabDirective){
+  this.activeTab= data;
+  if(this.activeTab.heading === 'messages' && this.messages.length ===0){
+    this.messageService.createHubConnection(this.user , this.member.username);
+
+
+  }
+}
+ngOnDestroy(): void {
+  this.messageService.stopHubConnection();
 }
 }

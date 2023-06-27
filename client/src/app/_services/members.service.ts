@@ -100,10 +100,10 @@ userParams:UserParams;
   }
 
 
-  getlike(predicate:string,pagenumber,pageSize){
-    let params= this.getPaginationHeaders(pagenumber,pageSize);
-    params= params.append('predicate',predicate);
-    return this.getPaginatedResult<Member[]>(this.baseUrl+'likes',params)
+  getlike(predicate:string){
+    //let params= this.getPaginationHeaders(pagenumber,pageSize);
+    //params= params.append('predicate',predicate);
+    return this.http.get<Partial<Member[]>>(this.baseUrl+'likes?predicate='+predicate)
   }
 
 

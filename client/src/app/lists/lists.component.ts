@@ -22,8 +22,8 @@ pagination:Pagination;
     this.loadLikes();
   }
   loadLikes(){
-    this.memberservice.getlike(this.predicate,this.pagnumber, this.pageSize).subscribe(response=>{
- this.pagination=response.pagination;
+    this.memberservice.getlike(this.predicate).subscribe(response=>{
+ this.members=response;
   })
 
 }
