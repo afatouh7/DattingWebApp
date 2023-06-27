@@ -7,6 +7,7 @@ using APi.Extensions;
 using APi.Helpers;
 using APi.Interfaces;
 using APi.Services;
+using APi.SignalR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,7 +41,7 @@ namespace APi
         public void ConfigureServices(IServiceCollection services)
         {
             var keytoken = new byte[512];
-
+            services.AddSingleton<PresenceTracker>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddScoped<ITokenService, TokenService>();
             
@@ -59,17 +60,8 @@ namespace APi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "APi", Version = "v1" });
             });
             services.AddCors();
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
-            //{
-            //    opt.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuerSigningKey = true,
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"])),
-            //        ValidateIssuer = false,
-            //        ValidateAudience = false,
-
-            //    };
-            //});
+            services.AddSignalR();
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,13 +73,15 @@ namespace APi
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200")) ;
+            app.UseCors(x => x.AllowAnyHeader().AllowCredentials().AllowAnyMethod().WithOrigins("http://localhost:4200")) ;
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<PresencHub>("hubs/presence");
+                endpoints.MapHub<MessageHub>("hubs/message");
             });
 
         }
