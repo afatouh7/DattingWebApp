@@ -7,6 +7,7 @@ namespace APi.SignalR
     public class PresenceTracker
     {
         private static readonly Dictionary<string, List<string>> OnlineUsers = new Dictionary<string, List<string>>();
+
         public Task UserConnected(string username, string connectionId)
         {
             lock(OnlineUsers)
@@ -47,6 +48,15 @@ namespace APi.SignalR
                 onlineUSers = OnlineUsers.OrderBy(k=>k.Key).Select(k=>k.Key).ToArray();
             }
             return Task.FromResult(onlineUSers);
+        } 
+        public Task<List<string>> GetConnectionForUser(string username)
+        {
+            List<string> connectionId;
+            lock(OnlineUsers)
+            {
+                connectionId= OnlineUsers.GetValueOrDefault(username);
+            }
+            return Task.FromResult(connectionId);   
         }
     }
 }

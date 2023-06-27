@@ -9,6 +9,8 @@ import { UserParams } from '../_models/userParams';
 import { BehaviorSubject, map, take } from 'rxjs';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { User } from '../_models/user';
+import { group } from '@angular/animations';
+import { Group } from '../_models/Group';
 
 @Injectable({
   providedIn: 'root'
@@ -73,10 +75,23 @@ createHubConnection(user:User, otherUsername:string){
   })
   this.hubConnection.on('NewMessage',message=>{
     this.meesageThread$.pipe(take(1)).subscribe(messages=>{
-      this.meesageThreadSource.next([...message,message])
+      this.meesageThreadSource.next([...messages,message])
     })
   })
 
+  this.hubConnection.on('UpdatedGroup',(group:Group)=>{
+    if(group.connections.some(x=>x.username===otherUsername)){
+      this.meesageThread$.pipe(take(1)).subscribe(messages=>{
+        messages.forEach(message=>{
+          if(!message.dateRead){
+            message.dateRead= new Date(Date.now())
+          }
+        })
+        this.meesageThreadSource.next([...messages])
+      })
+    }
+
+  })
 }
 private startConnection(): void {
   this.hubConnection?.start().catch(error => console.error(error));
