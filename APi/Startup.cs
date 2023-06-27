@@ -3,6 +3,7 @@ using Api.Interfaces;
 using Api.Middleware;
 using Api.Services;
 using APi.Data;
+using APi.Extensions;
 using APi.Helpers;
 using APi.Interfaces;
 using APi.Services;
@@ -52,22 +53,23 @@ namespace APi
             services.AddScoped<LogUserActivity>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddControllers();
+            services.AddIdentityServices(Configuration);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "APi", Version = "v1" });
             });
             services.AddCors();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
-            {
-                opt.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"])),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
+            //{
+            //    opt.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuerSigningKey = true,
+            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"])),
+            //        ValidateIssuer = false,
+            //        ValidateAudience = false,
 
-                };
-            });
+            //    };
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

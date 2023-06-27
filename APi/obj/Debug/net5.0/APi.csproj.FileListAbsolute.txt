@@ -75,7 +75,6 @@ D:\Projects\DATTINGaPP\DattingApp\APi\bin\Debug\net5.0\CloudinaryDotNet.dll
 D:\Projects\DATTINGaPP\DattingApp\APi\bin\Debug\net5.0\Newtonsoft.Json.dll
 C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\bin\Debug\net5.0\appsettings.Development.json
 C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\bin\Debug\net5.0\appsettings.json
-C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\bin\Debug\net5.0\Data\UserSeedDate.json
 C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\bin\Debug\net5.0\APi.exe
 C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\bin\Debug\net5.0\APi.deps.json
 C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\bin\Debug\net5.0\APi.runtimeconfig.json
@@ -148,3 +147,9 @@ C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\obj\Debug\net5.0\refint\APi.dll
 C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\obj\Debug\net5.0\APi.pdb
 C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\obj\Debug\net5.0\APi.genruntimeconfig.cache
 C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\obj\Debug\net5.0\ref\APi.dll
+C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\bin\Debug\net5.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\bin\Debug\net5.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\bin\Debug\net5.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\DELL G3\Source\Repos\DattingWebApp\APi\bin\Debug\net5.0\Data\UserSeedData.json

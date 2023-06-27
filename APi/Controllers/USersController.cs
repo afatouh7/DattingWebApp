@@ -5,6 +5,7 @@ using APi.Extensions;
 using APi.Helpers;
 using APi.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace APi.Controllers
 {
-    // [Authorize]
+    [Authorize]
 
     public class USersController : BaseApiController
     {
@@ -27,7 +28,7 @@ namespace APi.Controllers
             _mapper = mapper;
             _photoService = photoService;
         }
-       
+      //  [Authorize(Roles ="Admin")]
         [HttpGet] 
         public async Task<ActionResult<IEnumerable<MemeberDto>>> GetUSers([FromQuery]UserParams userParams)
         {
@@ -42,7 +43,7 @@ namespace APi.Controllers
        
             return Ok(users);
         }
-        //[Authorize]
+      //  [Authorize]
         
         [HttpGet("{username}",Name = "GetuserByUserName")] 
         public async Task<ActionResult<MemeberDto>> GetuserByUserName(string username)

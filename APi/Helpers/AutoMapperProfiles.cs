@@ -19,6 +19,7 @@ namespace APi.Helpers
             CreateMap<MemberUpdateDto , AppUser>();
             CreateMap<RgisterDto, AppUser>()
           .ForMember(dest => dest.KnownAs, opt => opt.MapFrom(src => src.KnownAs));
+//          .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src => src.DateOfBirth));
 
 
             CreateMap<Message, MessageDto>()
