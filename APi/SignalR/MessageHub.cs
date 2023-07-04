@@ -37,17 +37,19 @@ namespace APi.SignalR
             var otherUSer= httpContext.Request.Query["user"].ToString();
             var groupName = GetGroupName(Context.User.GetUsername(), otherUSer);
             await Groups.AddToGroupAsync(Context.ConnectionId,groupName);
-            await AddtoGroup(Context,groupName);
+           var group= await AddtoGroup(groupName);
+            await Clients.Group(groupName).SendAsync("UpdatedGroup", group);
 
             var messages = await _messageRepository.GetMessageThread(Context.User.GetUsername(), otherUSer);
 
-            await Clients.Group(groupName).SendAsync("ReciveMessageThread", messages);
+            await Clients.Caller.SendAsync("ReciveMessageThread", messages);
         }
 
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            await ReomveFromMessageGroup(Context.ConnectionId);
+          var group= await ReomveFromMessageGroup();
+            await Clients.Group(group.Name).SendAsync("UpdatedGroup", group);
             await base.OnDisconnectedAsync(exception);
         }
         public async Task SendMessage(CreateMessageDto  createMessageDto)
@@ -97,25 +99,29 @@ namespace APi.SignalR
 
         }
 
-        private async Task<bool> AddtoGroup(HubCallerContext context,string groupName)
+        private async Task<Group> AddtoGroup(string groupName)
         {
             var group = await _messageRepository.GetMessageGroup(groupName);
-            var connection = new Connection(context.ConnectionId, context.User.GetUsername());
+            var connection = new Connection(Context.ConnectionId, Context.User.GetUsername());
             if(group == null)
             {
                 group = new Group (groupName );
                 _messageRepository.AddGroup(group);
             }
             group.Connection.Add(connection);
-            return await _messageRepository.SaveAllAsync();
+            if( await _messageRepository.SaveAllAsync()) return group;
+            throw new HubException("Failed to join group");
         }
 
 
-        private async Task ReomveFromMessageGroup(string connectionId)
+        private async Task<Group> ReomveFromMessageGroup()
         {
-            var connection = await _messageRepository.GetConnection(connectionId);
+            var group = await _messageRepository.GetGroupForConnection(Context.ConnectionId);
+            var connection =group.Connection.FirstOrDefault(x=>x.ConnectionId == Context.ConnectionId);
+
             _messageRepository.RemoveConnection(connection);
-            await _messageRepository.SaveAllAsync();
+            if (await _messageRepository.SaveAllAsync()) return group;
+            throw new HubException("Failed to join group");
         }
 
         private string GetGroupName(string caller, string other)
